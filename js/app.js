@@ -7,11 +7,13 @@ var Enemy = function() {
     // ajudante que é fornecido para carregar imagens
     // com facilidade.
     this.sprite = 'images/enemy-bug.png';
+    console.log(this);
+    
 };
 
 // Atualize a posição do inimigo, método exigido pelo jogo
 // Parâmetro: dt, um delta de tempo entre ticks
-Enemy.prototype.update = function(dt) {
+Enemy.prototype.update = function(dt) {    
     // Você deve multiplicar qualquer movimento pelo parâmetro
     // dt, o que garantirá que o jogo rode na mesma velocidade
     // em qualquer computador.
@@ -32,10 +34,7 @@ var player = function () {
 // Represente seus objetos como instâncias.
 // Coloque todos os objetos inimgos numa array allEnemies
 // Coloque o objeto do jogador numa variável chamada jogador.
-var allEnemies = function () {
-    
-};
-
+var allEnemies = [];
 
 // Isto reconhece cliques em teclas e envia as chaves para seu
 // jogador. método handleInput(). Não é preciso mudar nada.
@@ -48,4 +47,5 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
+    
 });
