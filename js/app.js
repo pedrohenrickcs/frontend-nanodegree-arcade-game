@@ -91,11 +91,13 @@ const player = new Player();
 // Represente seus objetos como instâncias.
 // Coloque todos os objetos inimgos numa array allEnemies
 // Coloque o objeto do jogador numa variável chamada jogador.
+
 var allEnemies = [
-    new Enemy(0, 60, 150),
-    new Enemy(0, 140, 200),
-    new Enemy(0, 140, 100),
-    new Enemy(0, 220, 130)
+    new Enemy(0, 60, Math.floor(Math.random() * 300) + 100),
+    new Enemy(0, 140, Math.floor(Math.random() * 300) + 100),
+    new Enemy(0, 140, Math.floor(Math.random() * 300) + 100),
+    new Enemy(0, 220, Math.floor(Math.random() * 300) + 100),
+    new Enemy(0, 220, Math.floor(Math.random() * 300) + 100)
 ];
 
 const checkCollisions = (allEnemies, player) => {   
