@@ -1,6 +1,7 @@
 // Inimigos que nosso jogador deve evitar
 const x = 200;
 const y = 410;
+let level = 1;
 
 class Enemy {
 
@@ -47,6 +48,7 @@ class Player {
         this.sprite = 'images/char-boy.png';
         this.positionX = x;
         this.positionY = y;
+        this.eventWin = new Event('win');
     }
     
     update() {
@@ -60,7 +62,7 @@ class Player {
                 alertify.message('OK');
             });
                       
-            score('win');
+            document.dispatchEvent(this.eventWin);
         }        
     }
     
@@ -90,13 +92,23 @@ class Player {
     }
 };
 
-const score = (won) => {
-    let level = 1; 
-    if (won === 'win') {
-        level = level + 1;
+document.addEventListener('win', (e) => {
+
+    if (e.type === 'win') {
+        document.getElementById('level').innerHTML = level = level + 1;
         console.log(level);
     }
-};
+
+}, false);
+
+document.addEventListener('loose', (e) => {
+
+    if (e.type === 'loose') {
+        document.getElementById('level').innerHTML = level = level - 1;
+        console.log(level);
+    }
+
+}, false);
 
 // inicializando a classe Player criada
 const player = new Player();
@@ -120,6 +132,12 @@ const checkCollisions = (allEnemies, player) => {
 
             player.positionX = x;
             player.positionY = y;
+
+            this.eventLoose = new Event('loose');
+
+            if (document.getElementById('level').textContent > 1) {
+                document.dispatchEvent(this.eventLoose);
+            }
 
             alertify
                 .alert('Poxa! mas não desista, você consegue!! :)', function () {
