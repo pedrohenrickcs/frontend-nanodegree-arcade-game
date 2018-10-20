@@ -23,9 +23,7 @@ class Enemy {
 
         this.positionX += this.run * dt;
 
-        if (this.positionX >= 500) {
-            this.positionX = 0;
-        }
+        this.positionX >= 500 ? this.positionX = 0 : '';
         
     };
 
@@ -42,7 +40,7 @@ class Enemy {
 // Esta classe exige um método update(), 
 // um render() e um handleInput().
 
-// function that initializes the game
+// classe que inicializa o game
 class Player {
     
     constructor() {
@@ -52,16 +50,27 @@ class Player {
     }
     
     update() {
-        // console.log('update');        
+        if (this.positionY < 50) {
+            player.positionX = x;
+            player.positionY = y;  
+            console.log(player.positionY = y);
+
+            alertify
+            .alert('Parabéns, você venceu!! :)', function(){
+                alertify.message('OK');
+            });
+                      
+            score('win');
+        }        
     }
     
+    // renderiza o jogador
     render() {        
-        // console.log('render');        
         ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
     }
 
-    
-    handleInput(key) {
+    // movimenta o jogador conforme tecla que for pressionada
+    handleInput(key) {       
         
         if ( key === 'up' && this.positionY >= 50) {            
             this.positionY -= 90;
@@ -78,14 +87,18 @@ class Player {
         if ( key === 'right' && this.positionX <= 350) {
             this.positionX += 101;
         }
-
-        if (this.positionY < 50) {
-            player.positionX = x;
-            player.positionY = y;
-        }   
     }
 };
 
+const score = (won) => {
+    let level = 1; 
+    if (won === 'win') {
+        level = level + 1;
+        console.log(level);
+    }
+};
+
+// inicializando a classe Player criada
 const player = new Player();
 
 // Represente seus objetos como instâncias.
@@ -96,20 +109,22 @@ var allEnemies = [
     new Enemy(0, 60, Math.floor(Math.random() * 300) + 100),
     new Enemy(0, 140, Math.floor(Math.random() * 300) + 100),
     new Enemy(0, 140, Math.floor(Math.random() * 300) + 100),
-    new Enemy(0, 220, Math.floor(Math.random() * 300) + 100),
     new Enemy(0, 220, Math.floor(Math.random() * 300) + 100)
 ];
 
-const checkCollisions = (allEnemies, player) => {   
+const checkCollisions = (allEnemies, player) => {
 
 	for(const enemy of allEnemies) {
 
 		if ((player.positionX >= enemy.positionX - 50 && player.positionX <= enemy.positionX + 50) && (player.positionY >= enemy.positionY - 50 && player.positionY <= enemy.positionY + 50)) {
-            
-            console.log('foi', player.positionX);
 
             player.positionX = x;
             player.positionY = y;
+
+            alertify
+                .alert('Poxa! mas não desista, você consegue!! :)', function () {
+                    alertify.message('OK');
+                });
             
 		}
     }
