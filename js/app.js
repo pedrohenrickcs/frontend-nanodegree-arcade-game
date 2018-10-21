@@ -63,6 +63,22 @@ class Player {
             });
                       
             document.dispatchEvent(this.eventWin);
+
+            // reseta o jogo caso o jogador chegue ao nível '10'
+            if (document.getElementById('level').textContent === '10') {
+
+                document.getElementById('level').innerHTML = level = 1;
+
+                // reseta a velocidade do inimigo
+                for (let enemy in allEnemies) {
+                    window.allEnemies = [new Enemy(0, 60, 150), new Enemy(0, 140, 170), new Enemy(0, 220, 200)];
+                }
+
+                alertify
+                    .alert('Parabéns, você venceu!! :)', function () {
+                        alertify.message('Win');
+                    });
+            }
         }        
     }
     
@@ -102,7 +118,7 @@ const leveuUp = () => {
     }
 }
 
-// escuta o evento caso o jogador vença
+// escuta o evento caso o jogador avance o nivel
 document.addEventListener('win', (e) => {
 
     e.type === 'win' ? document.getElementById('level').innerHTML = level = level + 1 : '';
