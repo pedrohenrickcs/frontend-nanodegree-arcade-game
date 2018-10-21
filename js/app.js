@@ -2,7 +2,7 @@
 // Fornecemos uma a você para que possa começcar.
 const x = 200;
 const y = 410;
-const level = 1;
+let level = 1;
 
 // Inimigos que nosso jogador deve evitar
 class Enemy {
