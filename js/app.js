@@ -1,8 +1,10 @@
-// Inimigos que nosso jogador deve evitar
+// As variáveis aplicadas a nossas instâncias entram aqui.
+// Fornecemos uma a você para que possa começcar.
 const x = 200;
 const y = 410;
 let level = 1;
 
+// Inimigos que nosso jogador deve evitar
 class Enemy {
 
     constructor(x, y, run) {
@@ -11,9 +13,6 @@ class Enemy {
         this.positionY = y;
         this.run = run;  
     }
-    
-    // As variáveis aplicadas a nossas instâncias entram aqui.
-    // Fornecemos uma a você para que possa começcar.
 
     // Atualize a posição do inimigo, método exigido pelo jogo
     // Parâmetro: dt, um delta de tempo entre ticks
@@ -23,7 +22,6 @@ class Enemy {
         // em qualquer computador.        
 
         this.positionX += this.run * dt;
-
         this.positionX >= 500 ? this.positionX = 0 : '';
         
     };
@@ -52,14 +50,16 @@ class Player {
     }
     
     update() {
+        // verifica se o jogador chegou do outro lado
         if (this.positionY < 50) {
             player.positionX = x;
             player.positionY = y;  
-            console.log(player.positionY = y);
+            
+            leveuUp();
 
             alertify
-            .alert('Parabéns, você venceu!! :)', function(){
-                alertify.message('OK');
+            .alert('Parabéns, você subiu de nível!! :)', function(){
+                alertify.message('Próximo level');
             });
                       
             document.dispatchEvent(this.eventWin);
@@ -92,53 +92,55 @@ class Player {
     }
 };
 
+// aumenta a velocidade dos enemies, caso suba de nível
+const leveuUp = () => {
+    for (const enemy in allEnemies) {
+        if (allEnemies.hasOwnProperty(enemy)) {
+            const element = allEnemies[enemy];
+            element.run += 50;
+        }
+    }
+}
+
+// escuta o evento caso o jogador vença
 document.addEventListener('win', (e) => {
 
-    if (e.type === 'win') {
-        document.getElementById('level').innerHTML = level = level + 1;
-        console.log(level);
-    }
+    e.type === 'win' ? document.getElementById('level').innerHTML = level = level + 1 : '';
 
 }, false);
-
-document.addEventListener('loose', (e) => {
-
-    if (e.type === 'loose') {
-        document.getElementById('level').innerHTML = level = level - 1;
-        console.log(level);
-    }
-
-}, false);
-
-// inicializando a classe Player criada
-const player = new Player();
 
 // Represente seus objetos como instâncias.
 // Coloque todos os objetos inimgos numa array allEnemies
 // Coloque o objeto do jogador numa variável chamada jogador.
 
+// inicializando a classe Player criada
+const player = new Player();
+
 var allEnemies = [
-    new Enemy(0, 60, Math.floor(Math.random() * 300) + 100),
-    new Enemy(0, 140, Math.floor(Math.random() * 300) + 100),
-    new Enemy(0, 140, Math.floor(Math.random() * 300) + 100),
-    new Enemy(0, 220, Math.floor(Math.random() * 300) + 100)
+    new Enemy(0, 60, 150),
+    new Enemy(0, 140, 170),
+    new Enemy(0, 220, 200)
 ];
 
+// verifica caso o jogador entre em colisão com o inimigo
 const checkCollisions = (allEnemies, player) => {
 
 	for(const enemy of allEnemies) {
+        
+        if ((player.positionX >= enemy.positionX - 50 && player.positionX <= enemy.positionX + 50) && (player.positionY >= enemy.positionY - 50 && player.positionY <= enemy.positionY + 50)) {
 
-		if ((player.positionX >= enemy.positionX - 50 && player.positionX <= enemy.positionX + 50) && (player.positionY >= enemy.positionY - 50 && player.positionY <= enemy.positionY + 50)) {
+            document.getElementById('level').innerHTML = level = 1;
 
+            // reseta a posição do jogador
             player.positionX = x;
             player.positionY = y;
-
-            this.eventLoose = new Event('loose');
-
-            if (document.getElementById('level').textContent > 1) {
-                document.dispatchEvent(this.eventLoose);
+            
+            // reseta a velocidade do inimigo
+            for (let enemy in allEnemies) {
+                window.allEnemies = [new Enemy(0, 60, 150), new Enemy(0, 140, 170), new Enemy(0, 220, 200)];
             }
 
+            // exibe uma mensagem caso o jogador toque no inimigo
             alertify
                 .alert('Poxa! mas não desista, você consegue!! :)', function () {
                     alertify.message('OK');
