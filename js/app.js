@@ -68,7 +68,7 @@ class Player extends Game {
             document.dispatchEvent(this.eventWin);
 
             // reseta o jogo caso o jogador chegue ao nível '10'
-            if (document.getElementById('level').textContent === '3') {
+            if (document.getElementById('level').textContent === '10') {
 
                 document.getElementById('level').innerHTML = level = 1;
 
