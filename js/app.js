@@ -68,16 +68,13 @@ class Player extends Game {
             document.dispatchEvent(this.eventWin);
 
             // reseta o jogo caso o jogador chegue ao nível '10'
-            if (document.getElementById('level').textContent === '10') {
+            if (document.getElementById('level').textContent === '3') {
 
                 document.getElementById('level').innerHTML = level = 1;
 
                 // reseta a velocidade do inimigo
-                for (let enemy in allEnemies) {
-                    // window.allEnemies = [new Enemy('images/enemy-bug.png', 0, 60, 150), new Enemy('images/enemy-bug.png', 0, 140, 170), new Enemy('images/enemy-bug.png', 0, 220, 200)];
-                    enemy.run = enemy.initialRun;
-                    console.log('enemy', enemy);
-                    
+                for (let element of allEnemies) {
+                    element.run = element.initialRun;
                 }
 
                 alertify
