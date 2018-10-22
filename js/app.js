@@ -1,17 +1,27 @@
 // As variáveis aplicadas a nossas instâncias entram aqui.
-// Fornecemos uma a você para que possa começcar.
-const x = 200;
-const y = 410;
+// Fornecemos uma a você para que possa começar.
 let level = 1;
 
-// Inimigos que nosso jogador deve evitar
-class Enemy {
+// Superclasse para extender 'Enemy' e 'Player'
+class Game {
+    constructor(sprite, positionX, positionY) {
+        this.sprite = sprite;
+        this.positionX = positionX;
+        this.positionY = positionY;
+    }
 
-    constructor(x, y, run) {
-        this.sprite = 'images/enemy-bug.png';
-        this.positionX = x;
-        this.positionY = y;
-        this.run = run;  
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
+    }
+}
+
+// Inimigos que nosso jogador deve evitar
+class Enemy extends Game {
+
+    constructor(sprite, positionX, positionY, run) {
+        super(sprite = 'images/enemy-bug.png', positionX = positionX, positionY = positionY);
+        this.run = run;
+        this.initialRun = run;
     }
 
     // Atualize a posição do inimigo, método exigido pelo jogo
@@ -25,14 +35,6 @@ class Enemy {
         this.positionX >= 500 ? this.positionX = 0 : '';
         
     };
-
-    // A imagem/sprite de nossos inimigos, isso usa um
-    // ajudante que é fornecido para carregar imagens
-    // com facilidade.
-    // Desenhe o inimigo na tela, método exigido pelo jogo
-    render() {        
-        ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
-    };
 };
 
 // Agora, escreva sua própria classe de jogador
@@ -40,20 +42,21 @@ class Enemy {
 // um render() e um handleInput().
 
 // classe que inicializa o game
-class Player {
+class Player extends Game {
     
-    constructor() {
-        this.sprite = 'images/char-boy.png';
-        this.positionX = x;
-        this.positionY = y;
+    constructor(sprite, positionX, positionY) {
+        super(sprite = 'images/char-boy.png', positionX = positionX, positionY = positionY);
+        this.initialPositionX = positionX;
+        this.initialPositionY = positionY;
         this.eventWin = new Event('win');
+        
     }
     
     update() {
         // verifica se o jogador chegou do outro lado
         if (this.positionY < 50) {
-            player.positionX = x;
-            player.positionY = y;  
+            this.positionX = this.initialPositionX;
+            this.positionY = this.initialPositionY;  
             
             leveuUp();
 
@@ -71,7 +74,10 @@ class Player {
 
                 // reseta a velocidade do inimigo
                 for (let enemy in allEnemies) {
-                    window.allEnemies = [new Enemy(0, 60, 150), new Enemy(0, 140, 170), new Enemy(0, 220, 200)];
+                    // window.allEnemies = [new Enemy('images/enemy-bug.png', 0, 60, 150), new Enemy('images/enemy-bug.png', 0, 140, 170), new Enemy('images/enemy-bug.png', 0, 220, 200)];
+                    enemy.run = enemy.initialRun;
+                    console.log('enemy', enemy);
+                    
                 }
 
                 alertify
@@ -81,30 +87,15 @@ class Player {
             }
         }        
     }
-    
-    // renderiza o jogador
-    render() {        
-        ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
-    }
 
     // movimenta o jogador conforme tecla que for pressionada
     handleInput(key) {       
-        
-        if ( key === 'up' && this.positionY >= 50) {            
-            this.positionY -= 90;
-        }
 
-        if ( key === 'down' && this.positionY <= 350) {
-            this.positionY += 90;
-        }
+        key === 'up' && this.positionY >= 50 ? this.positionY -= 90 : '';
+        key === 'down' && this.positionY <= 350 ? this.positionY += 90 : '';
+        key === 'left' && this.positionX >= 50 ? this.positionX -= 101 : '';
+        key === 'right' && this.positionX <= 350 ? this.positionX += 101 : '';
 
-        if ( key === 'left' && this.positionX >= 50) {
-            this.positionX -= 101;
-        }
-
-        if ( key === 'right' && this.positionX <= 350) {
-            this.positionX += 101;
-        }
     }
 };
 
@@ -130,12 +121,12 @@ document.addEventListener('win', (e) => {
 // Coloque o objeto do jogador numa variável chamada jogador.
 
 // inicializando a classe Player criada
-const player = new Player();
+const player = new Player('images/char-boy.png', 200, 410);
 
 var allEnemies = [
-    new Enemy(0, 60, 150),
-    new Enemy(0, 140, 170),
-    new Enemy(0, 220, 200)
+    new Enemy('images/enemy-bug.png' , 0, 60, 150),
+    new Enemy('images/enemy-bug.png' , 0, 140, 170),
+    new Enemy('images/enemy-bug.png' , 0, 220, 200)
 ];
 
 // verifica caso o jogador entre em colisão com o inimigo
@@ -148,12 +139,12 @@ const checkCollisions = (allEnemies, player) => {
             document.getElementById('level').innerHTML = level = 1;
 
             // reseta a posição do jogador
-            player.positionX = x;
-            player.positionY = y;
+            player.positionX = player.initialPositionX;
+            player.positionY = player.initialPositionY;
             
             // reseta a velocidade do inimigo
-            for (let enemy in allEnemies) {
-                window.allEnemies = [new Enemy(0, 60, 150), new Enemy(0, 140, 170), new Enemy(0, 220, 200)];
+            for (let element of allEnemies) {
+                element.run = element.initialRun;
             }
 
             // exibe uma mensagem caso o jogador toque no inimigo
